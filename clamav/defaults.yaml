@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+clamav:
+  config: '/etc/clamav'
+  daemon:
+    pkg: clamav-daemon
+    service:
+      name: clamav-daemon
+  freshclam:
+    pkg: clamav-freshclam
+    service:
+      name: clamav-freshclam

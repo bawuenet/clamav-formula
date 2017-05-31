@@ -1,0 +1,6 @@
+clamav:
+  lookup:
+  	daemon:
+      systemd:
+        Socket:
+          ListenStream: 3310

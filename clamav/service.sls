@@ -3,6 +3,7 @@
 
 {%- from "clamav/map.jinja" import clamav with context %}
 
+
 clamav-daemon:
   service.running:
     - name: {{ clamav.daemon.service.name }}

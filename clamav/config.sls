@@ -3,7 +3,7 @@
 
 {%- from "clamav/map.jinja" import clamav with context %}
 
-{%- salt['grains.get']('os') == 'Debian' and salt['grains.get']('init') == 'systemd' %}
+{%- if salt['grains.get']('os') == 'Debian' and salt['grains.get']('init') == 'systemd' %}
 clamav-daemon-service-config:
   file.managed:
     - name: /etc/systemd/system/clamav-daemon.socket.d/extend.conf
@@ -13,7 +13,7 @@ clamav-daemon-service-config:
     - user: root
     - group: root
     - context:
-        settings: {{ clamav.daemon.systemd|json }}
+        settings: {{ clamav.daemon.get('systemd', {})|json }}
     - watch_in:
         service: clamav-daemon
 {%- endif %}

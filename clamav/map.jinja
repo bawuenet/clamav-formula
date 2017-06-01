@@ -2,40 +2,30 @@
 # vim: ft=jinja
 
 {## Start with  defaults from defaults.sls ##}
-{%- import_yaml 'clamav/defaults.yaml' as default_settings %}
+{% import_yaml 'clamav/defaults.yaml' as default_settings %}
 
 {##
 Setup variable using grains['os_family'] based logic, only add key:values here
 that differ from whats in defaults.yaml
 ##}
-{%- set os_family_map = salt['grains.filter_by']({
-        'Debian': {
-            "daemon": {
-                "systemd": {
-                    "Socket": [
-                        {"ListenStream": ""},
-                        {"SocketUser": "clamav"},
-                        {"ListenStream": "/var/run/clamav/clamd.ctl"},
-                        {"SocketGroup": "clamav"},
-                        {"SocketMode": 666},
-                    ]
-                }
-            }
-        },
-        'Suse': {},
-        'Arch': {},
-        'RedHat': {},
-  }
-  , grain="os_family"
-  , merge=salt['pillar.get']('clamav:lookup'))
+{% set os_family_map = salt['grains.filter_by']({
+    'Debian': {},
+    'Suse': {},
+    'Arch': {},
+    'RedHat': {},
+    'default': default_settings.clamav
+}
+, grain='os_family'
+, base='default')
 %}
+
 {## Merge the flavor_map to the default settings ##}
-{%- do default_settings.clamav.update(os_family_map) %}
+{#{% do default_settings.clamav.update(os_family_map) %}#}
 
 {## Merge in clamav:lookup pillar ##}
-{%- set clamav = salt['pillar.get'](
-        'clamav',
-        default=default_settings.clamav,
+{% set clamav = salt['pillar.get'](
+        'clamav:lookup',
+        default=os_family_map,
         merge=True
     )
 %}

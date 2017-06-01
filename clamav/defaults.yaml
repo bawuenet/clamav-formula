@@ -6,6 +6,14 @@ clamav:
     pkg: clamav-daemon
     service:
       name: clamav-daemon
+    systemd:
+      Socket:
+        # Lists are not merged. Copy any settings you want to keep.
+        - ListenStream: ""
+        - SocketUser: "clamav"
+        - ListenStream: "/var/run/clamav/clamd.ctl"
+        - SocketGroup: "clamav"
+        - SocketMode: 666
   freshclam:
     pkg: clamav-freshclam
     service:

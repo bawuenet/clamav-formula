@@ -22,7 +22,7 @@ clamav-daemon-service-config:
 clamav-daemon-clamd-config:
   file.managed:
     - name: /etc/clamav/clamd.conf
-    - mode: 640
+    - mode: 644
     - user: root
     - group: root
     - contents: |

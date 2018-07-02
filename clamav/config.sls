@@ -17,3 +17,17 @@ clamav-daemon-service-config:
     - watch_in:
         service: clamav-daemon
 {%- endif %}
+
+
+clamav-daemon-clamd-config:
+  file.managed:
+    - name: /etc/clamav/clamd.conf
+    - mode: 640
+    - user: root
+    - group: root
+    - contents: |
+        {%- for setting, value in clamav.daemon.settings.items() %}
+        {{ setting }} {{ value }}
+        {%- endfor %}
+    - watch_in:
+        service: clamav-daemon
